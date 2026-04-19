@@ -1,5 +1,6 @@
 from typing import Optional
 import yfinance as yf
+from api.database import save_forward_pe_data
 
 def _get_optional_rounded(info: dict, key: str, ndigits: Optional[int] = None) -> Optional[float]:
     """
@@ -26,6 +27,9 @@ def get_forward_pe(ticker_symbol: str) -> tuple[Optional[float], Optional[float]
     trl_eps = _get_optional_rounded(info, "trailingEps", 2)
     div_rate = _get_optional_rounded(info, "dividendRate", 2)
     cy_eps = _get_optional_rounded(info, "epsCurrentYear", 2)
+
+    # Save all fields to database
+    save_forward_pe_data(ticker_symbol, price, trl_eps, fwd_eps, fwd_pe, div_rate, cy_eps)
 
     return fwd_pe, price, fwd_eps, trl_eps, div_rate, cy_eps
 
