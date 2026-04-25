@@ -56,6 +56,7 @@ def get_stored_data(ticker: str):
     """Get today's stored data for a specific ticker"""
     data = get_stored_forward_pe_data(ticker)
     if data:
+        data = data[0]
         return {
             "date": data.fetch_date.isoformat(),
             "ticker": data.ticker,
@@ -73,6 +74,9 @@ def get_stored_data(ticker: str):
 def get_all_stored_data():
     """Get all today's stored data"""
     data = get_stored_forward_pe_data()
+    if not data:
+        return {"data": []}
+
     return {
         "data": [
             {
